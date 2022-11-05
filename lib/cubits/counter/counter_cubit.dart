@@ -17,7 +17,7 @@ class CounterCubit extends Cubit<CounterState> {
   CounterCubit({
     required this.colorCubit,
   }) : super(CounterState.initial()) {
-    colorSubscription = colorCubit.stream.listen(_colorHandler);
+    colorSubscription = colorCubit.stream.listen(_colorListener);
   }
 
   @override
@@ -26,7 +26,7 @@ class CounterCubit extends Cubit<CounterState> {
     return super.close();
   }
 
-  void _colorHandler(ColorState colorState) {
+  void _colorListener(ColorState colorState) {
     final color = colorState.color;
 
     if (color == Colors.red) incrementSize = 1;
