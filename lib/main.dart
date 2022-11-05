@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'cubits/color/color_cubit.dart';
+import 'cubits/counter/counter_cubit.dart';
 
 void main() => runApp(const MyApp());
 
@@ -6,12 +9,20 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cubit to Cubit Communication',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (ctx) => ColorCubit()),
+        BlocProvider(
+          create: (ctx) => CounterCubit(colorCubit: ctx.read<ColorCubit>()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Cubit to Cubit Communication',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
@@ -22,13 +33,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: context.watch<ColorCubit>().state.color,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.read<ColorCubit>().changeColor(),
               child: const Text(
                 'Change Color',
                 style: TextStyle(
@@ -37,17 +48,20 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              '0',
-              style: TextStyle(
-                fontSize: 52,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            BlocSelector<CounterCubit, CounterState, int>(
+              selector: (state) => state.counter,
+              builder: (ctx, counter) => Text(
+                '$counter',
+                style: const TextStyle(
+                  fontSize: 52,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.read<CounterCubit>().incrementCounter(),
               child: const Text(
                 'Increment Counter',
                 style: TextStyle(
