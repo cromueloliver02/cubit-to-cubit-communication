@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     return BlocConsumer<ColorCubit, ColorState>(
       listener: _colorListener,
       builder: (ctx, state) => Scaffold(
-        backgroundColor: ctx.watch<ColorCubit>().state.color,
+        backgroundColor: state.color,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
