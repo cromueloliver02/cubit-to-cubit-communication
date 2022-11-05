@@ -35,12 +35,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var _incrementSize = 1;
 
-  @override
-  void dispose() {
-    context.read<CounterCubit>().close();
-    super.dispose();
-  }
-
   void _colorListener(ctx, state) {
     final color = state.color;
 
