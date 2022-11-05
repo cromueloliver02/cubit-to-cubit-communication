@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     if (color == Colors.blue) _incrementSize = 100;
     if (color == Colors.black) {
       _incrementSize = -100;
-      ctx.read<CounterCubit>().incrementCounter(-100);
+      context.read<CounterCubit>().incrementCounter(-100);
     }
   }
 
